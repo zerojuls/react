@@ -22,8 +22,7 @@ task('clean:dist', cb => {
 // ----------------------------------------
 task('build:dist:commonjs', () => {
   const tsConfig = paths.base('build/tsconfig.commonjs.json')
-  const settings = { declaration: true }
-  const typescript = g.typescript.createProject(tsConfig, settings)
+  const typescript = g.typescript.createProject(tsConfig)
 
   const { dts, js } = src(paths.src('**/*.{ts,tsx}')).pipe(typescript())
   const types = src(paths.base('types/**'))
@@ -37,8 +36,7 @@ task('build:dist:commonjs', () => {
 
 task('build:dist:es', () => {
   const tsConfig = paths.base('build/tsconfig.es.json')
-  const settings = { declaration: true }
-  const typescript = g.typescript.createProject(tsConfig, settings)
+  const typescript = g.typescript.createProject(tsConfig)
 
   const { dts, js } = src(paths.src('**/*.{ts,tsx}')).pipe(typescript())
   const types = src(paths.base('types/**'))
