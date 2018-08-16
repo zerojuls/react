@@ -58,8 +58,8 @@ const componentsSrc = [`${config.paths.src()}/components/*/[A-Z]*.tsx`]
 const examplesSrc = `${paths.docsSrc()}/examples/*/*/*/index.tsx`
 const markdownSrc = ['.github/CONTRIBUTING.md', 'specifications/*.md']
 
-task('build:docs:docgen', () =>
-  src(componentsSrc, { since: lastRun('build:docs:docgen') })
+task('build:docs:component-info', () =>
+  src(componentsSrc, { since: lastRun('build:docs:component-info') })
     .pipe(gulpReactDocgen())
     .pipe(dest(paths.docsSrc('componentInfo'))),
 )
@@ -78,7 +78,7 @@ task('build:docs:example-menu', () =>
 
 task(
   'build:docs:json',
-  parallel('build:docs:docgen', 'build:docs:component-menu', 'build:docs:example-menu'),
+  parallel('build:docs:component-info', 'build:docs:component-menu', 'build:docs:example-menu'),
 )
 
 task('build:docs:html', () => src(paths.docsSrc('404.html')).pipe(dest(paths.docsDist())))
@@ -188,7 +188,7 @@ task('serve:docs', cb => {
 
 task('watch:docs', cb => {
   // rebuild component info
-  watch(componentsSrc, series('build:docs:docgen')).on('change', handleWatchChange)
+  watch(componentsSrc, series('build:docs:component-info')).on('change', handleWatchChange)
 
   // rebuild example menus
   watch(examplesSrc, series('build:docs:example-menu')).on('change', handleWatchChange)
