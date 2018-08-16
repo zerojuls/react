@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as glob from 'glob'
-import { src, task, parallel, series } from 'gulp'
+import { src, dest, task, parallel, series } from 'gulp'
 import * as gzip from 'gzip-size'
 import * as _ from 'lodash'
 import * as prettyBytes from 'pretty-bytes'
@@ -8,12 +8,21 @@ import * as uglifyES from 'uglify-es'
 
 import config from '../../../config'
 
+const g = require('gulp-load-plugins')()
 const { version } = require('../../../package.json')
 const { paths } = config
 
 // ----------------------------------------
 // Stats
 // ----------------------------------------
+task('build:stats:file', () => {
+  const tsConfig = paths.base('build/tsconfig.es.json')
+  const typescript = g.typescript.createProject(tsConfig)
+
+  const { js } = src(paths.base('build/stats/allComponents.tsx')).pipe(typescript())
+
+  return js.pipe(dest(paths.base('build/stats')))
+})
 
 task('build:stats', cb => {
   const stats = {
