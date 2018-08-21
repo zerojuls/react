@@ -12,6 +12,7 @@ import {
   UIComponent,
 } from '../../lib'
 import Icon from '../Icon'
+import Label from '../Label'
 
 /**
  * An Input
@@ -47,6 +48,12 @@ class Input extends AutoControlledComponent<any, any> {
     /** Shorthand for creating the HTML Input. */
     input: customPropTypes.itemShorthand,
 
+    /** Shorthand for creating a Label.  */
+    label: customPropTypes.itemShorthand,
+
+    /** The Label text can appear before or after the input element.  */
+    labelPosition: PropTypes.oneOf(['start', 'end']),
+
     /**
      * Called on change.
      *
@@ -77,6 +84,8 @@ class Input extends AutoControlledComponent<any, any> {
     'fluid',
     'icon',
     'input',
+    'label',
+    'labelPosition',
     'onChange',
     'styles',
     'type',
@@ -163,11 +172,12 @@ class Input extends AutoControlledComponent<any, any> {
   }
 
   renderComponent({ ElementType, classes, rest, styles }) {
-    const { children, clearable, input, type } = this.props
+    const { children, clearable, input, label, labelPosition, type } = this.props
     const [htmlInputProps, restProps] = this.partitionProps()
 
     const inputClasses = classes.input
-    const iconClasses = classes.icon
+    const labelAtEnd = labelPosition === 'end'
+    const labelAtStart = !labelAtEnd
 
     // Render with children
     // ----------------------------------------
@@ -187,6 +197,11 @@ class Input extends AutoControlledComponent<any, any> {
 
     return (
       <ElementType {...rest} className={classes.root} {...htmlInputProps}>
+        {labelAtStart &&
+          label &&
+          Label.create(label, {
+            defaultProps: { styles: { root: styles.label } },
+          })}
         {createHTMLInput(input || type, {
           defaultProps: htmlInputProps,
           overrideProps: {
@@ -198,6 +213,11 @@ class Input extends AutoControlledComponent<any, any> {
           Icon.create(this.computeIcon(), {
             defaultProps: { styles: { root: styles.icon } },
             overrideProps: this.handleIconOverrides,
+          })}
+        {labelAtEnd &&
+          label &&
+          Label.create(label, {
+            defaultProps: { styles: { root: styles.label } },
           })}
       </ElementType>
     )

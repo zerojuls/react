@@ -26,7 +26,6 @@ const inputStyles: IComponentPartStylesInput = {
       backgroundColor: variables.backgroundColor,
       height: variables.height,
       padding: variables.inputPadding,
-      width: '100%',
       ':focus': {
         borderColor: variables.inputFocusBorderColor,
         borderRadius: variables.inputFocusBorderRadius,
@@ -39,6 +38,13 @@ const inputStyles: IComponentPartStylesInput = {
       position: variables.iconPosition,
       right: variables.iconRight,
       outline: 0,
+    }
+  },
+
+  label: ({ props, variables }): ICSSInJSStyle => {
+    return {
+      position: 'relative',
+      backgroundColor: 'transparent',
     }
   },
 }
